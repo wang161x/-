@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common.exceptions import ElementClickInterceptedException
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -14,15 +15,15 @@ headers = {
 
 def login():
     params = {
-        'username': '您的身份证号',
-        'password': '您的密码',
+        'username': '41132919960525161x',
+        'password': 'bj123465',
     }
     # r = session.post("https://www.bjjnts.cn/login", params=params, headers = headers)
     driver.get(url='https://www.bjjnts.cn/login')
     username = driver.find_element_by_name("username")
     password = driver.find_element_by_name("password")
-    username.send_keys('您的身份证号')
-    password.send_keys("您的密码")
+    username.send_keys('41132919960525161x')
+    password.send_keys("bj123465")
     sbm = driver.find_element_by_class_name("login_btn")
     time.sleep(1)
     sbm.click()
@@ -60,8 +61,11 @@ def play_video(i):
         return 1
 
     # 点击播放
-    play_start = driver.find_element_by_xpath('//*[@id="studymovie"]')
-    play_start.click()
+    try:
+        play_start = driver.find_element_by_xpath('//*[@id="studymovie"]')
+        play_start.click()
+    except ElementClickInterceptedException:
+        input('请在人脸验证完毕之后点击回车键！！！')
 
     """
     探测下一节课是否已经解锁，未解锁，则循环找是否继续按钮，隔3s查找，若找不到则pass，找到点击按钮
